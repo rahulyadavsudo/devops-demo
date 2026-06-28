@@ -40,3 +40,31 @@ The backend connects to PostgreSQL running in the `db` service. The app creates 
 - Frontend sends requests to the backend API.
 - Backend stores messages in PostgreSQL.
 - This setup is useful for practicing containerization, CI/CD, and DevOps workflows.
+## Run on kind
+
+There is a `k8s/` folder with manifests for PostgreSQL, backend, and frontend deployments.
+
+1. Create a kind cluster:
+
+```bash
+kind create cluster --name devops-demo --config k8s/kind-config.yaml
+```
+
+2. Load your local Docker images into kind:
+
+```bash
+kind load docker-image deploy-backend:latest --name devops-demo
+kind load docker-image deploy-frontend:latest --name devops-demo
+```
+
+3. Deploy the workloads:
+
+```bash
+kubectl apply -f k8s/postgres-deployment.yaml
+kubectl apply -f k8s/backend-deployment.yaml
+kubectl apply -f k8s/frontend-deployment.yaml
+```
+
+4. Access the app:
+
+- Frontend: `http://localhost:30080`
